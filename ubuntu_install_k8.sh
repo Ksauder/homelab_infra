@@ -21,12 +21,15 @@ apt install containerd.io -y
 systemctl stop containerd
 mv /etc/containerd/config.toml /etc/containerd/config.toml.orig
 containerd config default > /etc/containerd/config.toml
-# Change the value of cgroup driver "SystemdCgroup = false" to "SystemdCgroup = true".
-# This will enable the systemd cgroup driver for the containerd container runtime.
+sed 's/SystemdCgroup = false/SystemdCgroup = true/g' -i
+systemctl enable --now containerd
+
 swapoff -a
 sed -e '/\/swapfile/ s/^#*/#/' -i /etc/fstab
 modprobe overlay
 modprobe br_netfilter
+echo 'overlay' >> /etc/modules
+echo 'br_netfilter' >> /etc/modules
 
 # network
 cat << EOF | tee /etc/sysctl.d/kubernetes.conf
@@ -51,16 +54,13 @@ apt-mark hold kubelet kubeadm kubectl
 
 # ready for cluster setup
 echo "You should:"
+echo "Set your static network address"
 echo "hostnamectl set-hostname k8s-<cp/worker#>"
 echo "add a matching entry in /etc/hosts: 127.0.0.1    k8s-<cp/worker#>"
 echo "If this is a worker, add the cp in /etc/hosts: 10.10.10.10    k8s-cp"
 echo "Use kubeadm to init a cluster - steps commented below"
 echo "Then install cilium/calico and such"
 
-# Change the value of cgroup driver in containerd/config.toml "SystemdCgroup = false" to "SystemdCgroup = true".
-# This will enable the systemd cgroup driver for the containerd container runtime.
-# sudo systemctl start containerd
-# sudo systemctl enable containerd
 # sudo kubeadm init --apiserver-advertise-address <vm_ip> --control-plane-endpoint <vm_hostname> --kubernetes-version 1.25.1 --service-cidr 10.96.0.0/12 --cri-socket=unix:///run/containerd/containerd.sock
 # mkdir -p $HOME/.kube
 # sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
