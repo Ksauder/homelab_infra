@@ -52,7 +52,7 @@ apt-mark hold kubelet kubeadm kubectl
 # ready for cluster setup
 echo "You should:"
 echo "hostnamectl set-hostname k8s-<cp/worker#>"
-echo "add a matching entry in /etc/hosts: 127.0.0.1    k8s-<cp/worker#">
+echo "add a matching entry in /etc/hosts: 127.0.0.1    k8s-<cp/worker#>"
 echo "If this is a worker, add the cp in /etc/hosts: 10.10.10.10    k8s-cp"
 echo "Use kubeadm to init a cluster - steps commented below"
 echo "Then install cilium/calico and such"
