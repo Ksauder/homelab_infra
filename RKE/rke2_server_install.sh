@@ -5,14 +5,21 @@ if [ "$EUID" -ne 0 ]; then
 	exit
 fi
 
+apt install curl -y
+
 # make NM ignore CNI stuff
 cat << EOF > /etc/NetworkManager/conf.d/rke2-canal.conf
 [keyfile]
 unmanaged-devices=interface-name:cali*;interface-name:flannel*
 EOF
+systemctl reload NetworkManager
 
 # install
 curl -sfL https://get.rke2.io | sh -
+cat << EOF > /etc/rancher/rke2/config.yaml
+cni: "cilium"
+EOF
+
 systemctl enable rke2-server.service
 systemctl start rke2-server.service
 

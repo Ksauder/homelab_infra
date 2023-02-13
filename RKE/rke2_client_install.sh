@@ -6,6 +6,8 @@ if [ "$EUID" -ne 0 ]; then
 	exit
 fi
 
+apt install curl -y
+
 # make NM ignore CNI stuff
 cat << EOF > /etc/NetworkManager/conf.d/rke2-canal.conf
 [keyfile]
