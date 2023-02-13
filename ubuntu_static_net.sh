@@ -1,5 +1,15 @@
 #!/bin/bash
 
-nmcli con add con-name "static-ens33" ifname ens33 type ethernet ip4 192.168.174.80/24 gw 192.168.174.2
-nmcli con mod "static-ens33" ipv4.dns "192.168.174.2,8.8.8.8"
-nmcli con up "static-ens33"
+# TODO: make this work a little better
+
+IFNAME="fillmein"
+CONNAME="static1"
+STATIC_IP="192.168.1.80/24"
+GATEWAY_IP="192.168.1.1"
+DNS_IP="192.168.1.1"
+
+
+
+nmcli con add con-name "${CONNAME}" ifname "${IFNAME}" type ethernet ip4 "${STATIC_IP}" gw4 "${GATEWAY_IP}"
+nmcli con mod "${CONNAME}" ipv4.dns "${DNS_IP}"
+nmcli con up "${CONNAME}"

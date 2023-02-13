@@ -8,8 +8,7 @@ K8_MINOR=${K8_MINOR:-25}
 K8_PATCH=${K8_PATCH:-1-00}
 
 # prep the box
-apt-get update && apt-get upgrade -y
-apt-get install -y vim
+apt update && apt upgrade -y
 apt install curl apt-transport-https vim git wget gnupg2 \
     software-properties-common ca-certificates uidmap -y
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker.gpg
